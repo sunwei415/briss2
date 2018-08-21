@@ -1,0 +1,52 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+group = 'at.laborg'
+version = '1.0-rc.1'
+
+description = """briss"""
+
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}
+
+
+
+repositories {
+        
+     maven { url "http://clojars.org/repo" }
+     maven { url "http://maven.geotoolkit.org/" }
+     maven { url "http://repo.maven.apache.org/maven2" }
+}
+dependencies {
+    compile group: 'org.bouncycastle', name: 'bctsp-jdk15', version:'1.46'
+    compile group: 'com.itextpdf', name: 'itextpdf', version:'5.2.0'
+    compile group: 'org.jpedal', name: 'jpedal-lgpl', version:'4.74b27'
+    compile group: 'javax.media', name: 'jai_imageio', version:'1.1.1'
+    compile group: 'javax.media', name: 'jai_core', version:'1.1.3'
+    compile group: 'javax.media', name: 'jai_codec', version:'1.1.3'
+    testCompile group: 'junit', name: 'junit', version:'3.8.1'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'at.laborg.briss.Briss'
+    }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
+    }
+}
+
